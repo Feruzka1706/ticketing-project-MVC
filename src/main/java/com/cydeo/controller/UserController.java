@@ -7,10 +7,8 @@ import com.cydeo.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
 
 @Controller
 @RequestMapping("/user")
@@ -42,6 +40,35 @@ public class UserController {
         //return "user/create"; //user, roles, users
         return "redirect:/user/create"; //redirecting above controller method
 
+    }
+
+    @GetMapping("/update/{username}")
+    public String getUpdateUserForm(@PathVariable(value = "username") String emailId,
+                                    Model model){
+
+       //define the modelAttributes -> user, roles, users
+        model.addAttribute("user", userService.findById(emailId));
+        model.addAttribute("roles",roleService.findAll());
+        model.addAttribute("users",userService.findAll());
+
+        return "/user/update";
+    }
+
+
+    @PostMapping("/update/{username}")
+    public String updateUserForm(@PathVariable(value = "username") String emailId,
+                               @ModelAttribute("user") UserDTO userDTO){
+
+        userService.update(userDTO);
+        return "redirect:/user/create";
+    }
+
+
+    @GetMapping("/delete/{username}")
+    public String deleteUserById(@PathVariable(value = "username") String emailId){
+
+        userService.deleteById(emailId);
+        return "redirect:/user/create";
     }
 
 }
