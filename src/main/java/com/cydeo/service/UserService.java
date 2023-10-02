@@ -7,4 +7,6 @@ import java.util.List;
 public interface UserService extends CrudService<UserDTO,String>{
 
     // CRUD operators - save, findById, deleteRow, getAllRow (findAll())
+
+    List<UserDTO> findManagers();
 }
